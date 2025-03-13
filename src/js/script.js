@@ -30,15 +30,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Newsletter form handling
+    // Newsletter form handling with EmailJS
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const emailInput = newsletterForm.querySelector('input[type="email"]');
             if (emailInput && emailInput.value) {
-                alert('Thank you for subscribing! You will receive updates soon.');
-                newsletterForm.reset();
+                // EmailJS credentials
+                const USER_ID = "n0Pr7KDvjWfqXN4Tl"; // Public Key
+                const SERVICE_ID = "service_l35043r"; // Service ID
+                const TEMPLATE_ID = "template_5zzpngq"; // Template ID
+                
+                // Initialize EmailJS
+                emailjs.init(USER_ID);
+                
+                // Send email using EmailJS
+                emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+                    subscriber_email: emailInput.value,
+                    to_name: "Subscriber",
+                    from_name: "Twinstars Team",
+                    subject: "Welcome to Twinstars Newsletter!",
+                    message: "Thank you for subscribing to our newsletter. You'll receive updates about Secret Travelers and our future projects."
+                }).then(
+                    function(response) {
+                        console.log("SUCCESS", response);
+                        alert('Thank you for subscribing! You will receive updates soon.');
+                        newsletterForm.reset();
+                    },
+                    function(error) {
+                        console.error("FAILED", error);
+                        alert('Oops! Something went wrong. Please try again later.');
+                    }
+                );
             }
         });
     }
