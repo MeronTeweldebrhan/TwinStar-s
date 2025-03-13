@@ -45,24 +45,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Initialize EmailJS
                 emailjs.init(USER_ID);
                 
-                // Send email using EmailJS
-                emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-                    subscriber_email: emailInput.value,
-                    to_name: "Subscriber",
+                // Prepare email template parameters
+                const templateParams = {
+                    to_email: emailInput.value,
+                    to_name: "Valued Subscriber",
                     from_name: "Twinstars Team",
-                    subject: "Welcome to Twinstars Newsletter!",
-                    message: "Thank you for subscribing to our newsletter. You'll receive updates about Secret Travelers and our future projects."
-                }).then(
-                    function(response) {
-                        console.log("SUCCESS", response);
-                        alert('Thank you for subscribing! You will receive updates soon.');
-                        newsletterForm.reset();
-                    },
-                    function(error) {
-                        console.error("FAILED", error);
-                        alert('Oops! Something went wrong. Please try again later.');
-                    }
-                );
+                    subject: "Welcome to Twinstars Newsletter! 🌟",
+                    message: `Thank you for subscribing to the Twinstars newsletter!
+
+We're excited to have you join our community. You'll be the first to receive:
+• Updates about Secret Travelers developments
+• Exclusive behind-the-scenes content
+• Early access to new project announcements
+• Special community events and opportunities
+
+Stay tuned for our upcoming updates!
+
+Best regards,
+The Twinstars Team`,
+                    reply_to: "info@twinstars.com"
+                };
+                
+                // Send welcome email using EmailJS
+                emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                    .then(
+                        function(response) {
+                            console.log("SUCCESS", response);
+                            alert('Welcome to the Twinstars community! Check your email for a confirmation message.');
+                            newsletterForm.reset();
+                        },
+                        function(error) {
+                            console.error("FAILED", error);
+                            alert('Oops! Something went wrong. Please try again later.');
+                        }
+                    );
             }
         });
     }
