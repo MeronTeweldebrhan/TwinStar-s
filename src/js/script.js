@@ -67,4 +67,92 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.transform = 'translateY(0)';
         });
     });
+
+    // Habesha Harmony Specific Features
+    if (window.location.pathname.includes('habesha-harmony')) {
+        // Debate Topic Filter
+        const debateTopics = document.querySelectorAll('.debate-topic');
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.placeholder = 'Search upcoming debates...';
+        searchInput.className = 'debate-search';
+        
+        const upcomingDebates = document.querySelector('.upcoming-debates');
+        if (upcomingDebates) {
+            upcomingDebates.insertBefore(searchInput, upcomingDebates.querySelector('.debate-topic'));
+            
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                debateTopics.forEach(topic => {
+                    const title = topic.querySelector('h3').textContent.toLowerCase();
+                    const description = topic.querySelector('p').textContent.toLowerCase();
+                    const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
+                    topic.style.display = isVisible ? 'flex' : 'none';
+                });
+            });
+        }
+
+        // Speaker Registration Form
+        const registerBtn = document.querySelector('a[href="contact.html"].btn.primary');
+        if (registerBtn) {
+            registerBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modal = document.createElement('div');
+                modal.className = 'registration-modal';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <h2>Register as a Speaker</h2>
+                        <form id="speakerForm">
+                            <input type="text" placeholder="Full Name" required>
+                            <input type="email" placeholder="Email" required>
+                            <select required>
+                                <option value="">Select Debate Topic</option>
+                                <option value="cultural-identity">Cultural Identity</option>
+                                <option value="generational-perspectives">Generational Perspectives</option>
+                                <option value="economic-empowerment">Economic Empowerment</option>
+                            </select>
+                            <textarea placeholder="Brief introduction and expertise" required></textarea>
+                            <div class="modal-buttons">
+                                <button type="submit" class="btn primary">Submit</button>
+                                <button type="button" class="btn secondary close-modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                // Close modal functionality
+                const closeBtn = modal.querySelector('.close-modal');
+                closeBtn.addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                });
+                
+                // Form submission
+                const speakerForm = modal.querySelector('#speakerForm');
+                speakerForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('Thank you for registering! We will review your application and contact you soon.');
+                    document.body.removeChild(modal);
+                });
+            });
+        }
+
+        // Debate countdown timer
+        const debateDates = document.querySelectorAll('.debate-date');
+        debateDates.forEach(dateElement => {
+            const debateDate = new Date(dateElement.textContent);
+            const updateTimer = () => {
+                const now = new Date();
+                const diff = debateDate - now;
+                
+                if (diff > 0) {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    dateElement.innerHTML = `${dateElement.textContent}<br><span class="countdown">${days}d ${hours}h until debate</span>`;
+                }
+            };
+            updateTimer();
+            setInterval(updateTimer, 1000 * 60 * 60); // Update every hour
+        });
+    }
 });

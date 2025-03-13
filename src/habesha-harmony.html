@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habesha Harmony - Twinstars</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script defer src="./js/script.js"></script>
+    <style>
+        .mission-vision-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .mission-vision-values .card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid #FFD700;
+            transition: transform 0.3s ease;
+        }
+
+        .mission-vision-values .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .guidelines-list li {
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .guidelines-list li:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .debate-format {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .debate-format ol {
+            counter-reset: debate-steps;
+            list-style: none;
+            padding: 0;
+        }
+
+        .debate-format ol li {
+            counter-increment: debate-steps;
+            margin: 20px 0;
+            padding-left: 50px;
+            position: relative;
+        }
+
+        .debate-format ol li::before {
+            content: counter(debate-steps);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            background: #FFD700;
+            color: #10102A;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .join-debate-cta {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: linear-gradient(45deg, rgba(0,0,0,0.4), rgba(255,215,0,0.1));
+            border-radius: 15px;
+        }
+
+        .upcoming-debates {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .debate-topic {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .debate-topic:hover {
+            transform: translateX(10px);
+        }
+
+        .debate-date {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .mission-vision-values {
+                grid-template-columns: 1fr;
+            }
+            
+            .debate-topic {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="./assets/images/twinstar.webp" alt="Twinstars Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="projects-hero">
+            <h1>Habesha Harmony</h1>
+            <p class="projects-intro">Fostering unity through structured dialogue and cultural understanding</p>
+        </section>
+
+        <section class="project-overview">
+            <p>Habesha Harmony is more than a debate platform—it's a movement towards meaningful dialogue and understanding within our community. Through professionally moderated discussions, we create spaces where diverse perspectives meet, cultural bonds strengthen, and solutions emerge.</p>
+        </section>
+
+        <section class="mission-vision-values">
+            <div class="card">
+                <h2>Our Mission</h2>
+                <p>To create a respectful, inclusive space for Habesha people to engage in constructive dialogue on meaningful topics, fostering understanding and community cohesion across diverse backgrounds and perspectives.</p>
+            </div>
+            <div class="card">
+                <h2>Our Vision</h2>
+                <p>A united Habesha community that embraces diverse viewpoints while maintaining cultural harmony, where differences are discussed with respect and understanding rather than division.</p>
+            </div>
+            <div class="card">
+                <h2>Our Values</h2>
+                <ul>
+                    <li>Respect for diverse opinions</li>
+                    <li>Cultural integrity</li>
+                    <li>Evidence-based discourse</li>
+                    <li>Community-driven solutions</li>
+                    <li>Inclusive dialogue</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="debate-format">
+            <h2>Debate Format</h2>
+            <p>Our structured format ensures productive, balanced, and insightful conversations:</p>
+            <ol>
+                <li><strong>Opening Statements</strong> - Each participant presents their initial position (5 minutes)</li>
+                <li><strong>Moderated Discussion</strong> - Guided dialogue on key aspects (30 minutes)</li>
+                <li><strong>Audience Questions</strong> - Community engagement (15 minutes)</li>
+                <li><strong>Closing Statements</strong> - Final thoughts (3 minutes each)</li>
+                <li><strong>Synthesis</strong> - Moderator's summary and action points</li>
+            </ol>
+        </section>
+
+        <section class="guidelines">
+            <h2>Debate Guidelines</h2>
+            <ul class="guidelines-list">
+                <li>
+                    <strong>Focus on Ideas</strong>
+                    <p>Critique perspectives and arguments, not individuals. Foster an environment of intellectual growth and mutual respect.</p>
+                </li>
+                <li>
+                    <strong>Evidence-Based Discussion</strong>
+                    <p>Support claims with credible sources and research. Anecdotal evidence should complement, not replace, factual information.</p>
+                </li>
+                <li>
+                    <strong>Cultural Sensitivity</strong>
+                    <p>Acknowledge the diversity within Habesha communities. Avoid generalizations and respect regional differences.</p>
+                </li>
+                <li>
+                    <strong>Solution-Oriented Approach</strong>
+                    <p>Focus on constructive solutions rather than just highlighting problems. Every challenge is an opportunity for innovation.</p>
+                </li>
+                <li>
+                    <strong>Language Accessibility</strong>
+                    <p>Debates are conducted in multiple languages with translation support to ensure inclusive participation.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="upcoming-debates">
+            <h2>Upcoming Debates</h2>
+            <div class="debate-topic">
+                <div class="topic-info">
+                    <h3>Preserving Cultural Identity in a Global World</h3>
+                    <p>Exploring strategies to maintain cultural heritage while embracing modern opportunities</p>
+                </div>
+                <span class="debate-date">June 15, 2024</span>
+            </div>
+            <div class="debate-topic">
+                <div class="topic-info">
+                    <h3>Bridging Generational Perspectives</h3>
+                    <p>Understanding and addressing the viewpoints of different generations in our community</p>
+                </div>
+                <span class="debate-date">July 1, 2024</span>
+            </div>
+            <div class="debate-topic">
+                <div class="topic-info">
+                    <h3>Economic Empowerment Through Collaboration</h3>
+                    <p>Discussing ways to strengthen our community's economic foundation</p>
+                </div>
+                <span class="debate-date">July 20, 2024</span>
+            </div>
+        </section>
+
+        <section class="join-debate-cta">
+            <h2>Be Part of the Conversation</h2>
+            <p>Whether you're a community leader, expert in your field, or passionate community member, your voice matters in shaping our collective future.</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn primary">Register as Speaker</a>
+                <a href="#" class="btn secondary">Attend Next Debate</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-social">
+                <a href="#" class="social-link">Instagram</a>
+                <a href="#" class="social-link">Facebook</a>
+                <a href="#" class="social-link">Twitter</a>
+            </div>
+            <p>&copy; 2025 Twinstars Quantum Alignment. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
