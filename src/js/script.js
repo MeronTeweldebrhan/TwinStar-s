@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Twinstars Quantum Alignment Website Loaded Successfully!");
 
+    // Contact Form handling with EmailJS
     const contactForm = document.getElementById('contactForm');
-    
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
             
             // Get form data
             const formData = new FormData(contactForm);
             const data = Object.fromEntries(formData);
             
-            // Simple validation
+            // Validation
             let isValid = true;
             for (let [key, value] of Object.entries(data)) {
                 if (!value.trim()) {
@@ -19,39 +19,83 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 }
             }
-            
-            if (isValid) {
-                // Here you would typically send the data to a server
-                alert('Thank you for your message! We will get back to you soon.');
-                contactForm.reset();
-            } else {
-                alert('Please fill in all fields.');
-            }
-        });
-    }
 
-    // Newsletter form handling with EmailJS
-    const newsletterForm = document.getElementById('newsletterForm');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const emailInput = newsletterForm.querySelector('input[type="email"]');
-            if (emailInput && emailInput.value) {
+            if (isValid) {
                 // EmailJS credentials
-                const USER_ID = "n0Pr7KDvjWfqXN4Tl"; // Public Key
-                const SERVICE_ID = "service_l35043r"; // Service ID
-                const TEMPLATE_ID = "template_5zzpngq"; // Template ID
+                const USER_ID = "n0Pr7KDvjWfqXN4Tl";
+                const SERVICE_ID = "service_l35043r";
+                const TEMPLATE_ID = "template_5zzpngq";
                 
                 // Initialize EmailJS
                 emailjs.init(USER_ID);
                 
                 // Prepare email template parameters
                 const templateParams = {
-                    to_email: emailInput.value,
-                    to_name: "Valued Subscriber",
-                    from_name: "Twinstars Team",
-                    subject: "Welcome to Twinstars Newsletter! 🌟",
-                    message: `Thank you for subscribing to the Twinstars newsletter!
+                    from_name: data.name,
+                    from_email: data.email,
+                    subject: data.subject,
+                    message: data.message,
+                    to_name: "Twinstars Team",
+                    to_email: "meronkelati66@gmail.com",
+                    reply_to: data.email
+                };
+                
+                // Send message using EmailJS
+                emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                    .then(
+                        function (response) {
+                            console.log("SUCCESS", response);
+                            alert('Thank you for your message! We will get back to you soon.');
+                            contactForm.reset();
+                        },
+                        function (error) {
+                            console.error("FAILED", error);
+                            alert('Oops! Something went wrong. Please try again later.');
+                        }
+                    );
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+    }
+
+    // Newsletter form handling with backend and EmailJS fallback
+    const newsletterForm = document.getElementById('newsletterForm');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailInput = newsletterForm.querySelector('input[type="email"]');
+            
+            if (emailInput && emailInput.value) {
+                try {
+                    // First, try to subscribe using our backend
+                    const response = await fetch('http://localhost:5000/api/subscribers/subscribe', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: emailInput.value
+                        })
+                    });
+    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // If backend subscription successful, send welcome email via EmailJS
+                        const USER_ID = "n0Pr7KDvjWfqXN4Tl";
+                        const SERVICE_ID = "service_l35043r";
+                        const TEMPLATE_ID = "template_5zzpngq";
+                        
+                        emailjs.init(USER_ID);
+                        
+                        // Prepare email template parameters
+                        const templateParams = {
+                            to_email: emailInput.value,
+                            to_name: "Valued Subscriber",
+                            from_name: "Twinstars Team",
+                            subject: "Welcome to Twinstars Newsletter! 🌟",
+                            message: `Thank you for subscribing to the Twinstars newsletter!
 
 We're excited to have you join our community. You'll be the first to receive:
 • Updates about Secret Travelers developments
@@ -62,23 +106,47 @@ We're excited to have you join our community. You'll be the first to receive:
 Stay tuned for our upcoming updates!
 
 Best regards,
-The Twinstars Team`,
-                    reply_to: "info@twinstars.com"
-                };
-                
-                // Send welcome email using EmailJS
-                emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
-                    .then(
-                        function(response) {
-                            console.log("SUCCESS", response);
-                            alert('Welcome to the Twinstars community! Check your email for a confirmation message.');
-                            newsletterForm.reset();
-                        },
-                        function(error) {
-                            console.error("FAILED", error);
-                            alert('Oops! Something went wrong. Please try again later.');
+The Twinstars Team`
+                        };
+                        
+                        await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
+                        alert('Welcome to the Twinstars community! Check your email for a confirmation message.');
+                        newsletterForm.reset();
+                    } else {
+                        // If backend reports email already subscribed
+                        if (response.status === 400) {
+                            alert('This email is already subscribed to our newsletter.');
+                        } else {
+                            throw new Error(data.message || 'Subscription failed');
                         }
-                    );
+                    }
+                } catch (error) {
+                    console.error('Subscription error:', error);
+                    
+                    // Fallback to EmailJS only if backend is unavailable
+                    try {
+                        const USER_ID = "n0Pr7KDvjWfqXN4Tl";
+                        const SERVICE_ID = "service_l35043r";
+                        const TEMPLATE_ID = "template_5zzpngq";
+                        
+                        emailjs.init(USER_ID);
+                        
+                        const templateParams = {
+                            to_email: emailInput.value,
+                            to_name: "Subscriber",
+                            from_name: "Twinstars Team",
+                            subject: "Welcome to Twinstars Newsletter!",
+                            message: "Thank you for subscribing to our newsletter. You'll receive updates about Secret Travelers and our future projects."
+                        };
+                        
+                        await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
+                        alert('Thank you for subscribing! You will receive updates soon.');
+                        newsletterForm.reset();
+                    } catch (emailjsError) {
+                        console.error('EmailJS error:', emailjsError);
+                        alert('Oops! Something went wrong. Please try again later.');
+                    }
+                }
             }
         });
     }

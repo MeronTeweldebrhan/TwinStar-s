@@ -1,52 +1,33 @@
-const http = require('http');
-const fs = require('fs');
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 const path = require('path');
+const bodyParser = require('body-parser');
+const subscriberRoutes = require('./routes/subscribers');
 
-const PORT = 8000;
-const MIME_TYPES = {
-    '.html': 'text/html',
-    '.css': 'text/css',
-    '.js': 'text/javascript',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.webp': 'image/webp',
-    '.gif': 'image/gif',
-    '.ico': 'image/x-icon',
-};
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-const server = http.createServer((req, res) => {
-    // Handle root URL
-    let filePath = req.url === '/' ? './src/index.html' : './src' + req.url;
-    
-    // Get the file extension
-    const ext = path.extname(filePath);
-    
-    // Set the content type based on file extension
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'src')));
 
-    fs.readFile(filePath, (err, content) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                // Page not found
-                fs.readFile('./src/404.html', (err, content) => {
-                    res.writeHead(404, { 'Content-Type': 'text/html' });
-                    res.end(content, 'utf8');
-                });
-            } else {
-                // Server error
-                res.writeHead(500);
-                res.end(`Server Error: ${err.code}`);
-            }
-        } else {
-            // Success
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf8');
-        }
-    });
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+// API Routes
+app.use('/api/subscribers', subscriberRoutes);
+
+// Serve static files
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'index.html'));
 });
 
-server.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}/`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
     console.log('Press Ctrl+C to stop the server');
 });
